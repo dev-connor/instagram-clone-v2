@@ -62,51 +62,58 @@ class _PostImageSelectScreenState extends State<PostImageSelectScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: GestureDetector(
-              onTap: _pickFromGallery,
-              child: Container(
-                color: const Color(0xFF1C1C1C),
-                child: _selectedImage != null
-                    ? Image.file(_selectedImage!, fit: BoxFit.cover)
-                    : Center(
-                        child: _picking
-                            ? const CircularProgressIndicator()
-                            : const Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.add_photo_alternate_outlined,
-                                      color: Colors.white54, size: 48),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    '탭하여 사진을 선택하세요',
-                                    style: TextStyle(color: Colors.white54),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.5,
+              ),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: GestureDetector(
+                  onTap: _pickFromGallery,
+                  child: Container(
+                    color: const Color(0xFF1C1C1C),
+                    child: _selectedImage != null
+                        ? Image.file(_selectedImage!, fit: BoxFit.cover)
+                        : Center(
+                            child: _picking
+                                ? const CircularProgressIndicator()
+                                : const Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.add_photo_alternate_outlined,
+                                          color: Colors.white54, size: 48),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        '탭하여 사진을 선택하세요',
+                                        style: TextStyle(color: Colors.white54),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                      ),
+                          ),
+                  ),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                const Text(
-                  '최근 항목',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(width: 4),
-                const Icon(Icons.expand_more, color: Colors.white, size: 18),
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Row(
+                children: [
+                  const Text(
+                    '최근 항목',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.expand_more, color: Colors.white, size: 18),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: GridView.builder(
+            GridView.builder(
               padding: const EdgeInsets.all(2),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 2,
@@ -123,8 +130,8 @@ class _PostImageSelectScreenState extends State<PostImageSelectScreen> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
