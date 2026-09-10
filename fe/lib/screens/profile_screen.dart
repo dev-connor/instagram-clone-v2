@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/comment_provider.dart';
 import '../providers/post_provider.dart';
 import 'login_screen.dart';
+import 'post_detail_screen.dart';
 import 'post_image_select_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -15,6 +17,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final posts = context.watch<PostProvider>();
+    final comments = context.watch<CommentProvider>();
     final user = auth.currentUser;
 
     if (user == null) {
@@ -114,9 +117,49 @@ class ProfileScreen extends StatelessWidget {
                     itemCount: userPosts.length,
                     itemBuilder: (context, index) {
                       final post = userPosts[index];
-                      return Image.file(
-                        File(post.imagePath),
-                        fit: BoxFit.cover,
+                      final commentCount =
+                          comments.commentCountByPost(post.id);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => PostDetailScreen(post: post),
+                            ),
+                          );
+                        },
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.file(
+                              File(post.imagePath),
+                              fit: BoxFit.cover,
+                            ),
+                            if (commentCount > 0)
+                              Positioned(
+                                right: 6,
+                                bottom: 6,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.mode_comment,
+                                      color: Colors.white,
+                                      size: 14,
+                                    ),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      '$commentCount',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
                       );
                     },
                   ),

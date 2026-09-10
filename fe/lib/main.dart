@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
+import 'providers/comment_provider.dart';
 import 'providers/post_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/profile_screen.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => PostProvider()),
+        ChangeNotifierProvider(create: (_) => CommentProvider()),
       ],
       child: MaterialApp(
         title: 'Instagram Clone',
